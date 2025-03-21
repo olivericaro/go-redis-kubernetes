@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - image: redis
+        name: redis
+        ports:
+        - containerPort: 6379
+        resources:
+          # Garanteed 
+          requests:
+            cpu: 1000m
+            memory: 2046Mi
+          limits:
+            cpu: 1000m
+            memory: 2046Mi
+        command: ['redis-server', '/etc/config/redis.conf']
+        volumeMounts:
+          - name: redis-config
+            mountPath: /etc/config
+          - name: redis-data
+            mountPath: /data
+      volumes:
+        - name: redis-config
+          configMap:
+            name: redis-config
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-pvc 
+
+status: {}

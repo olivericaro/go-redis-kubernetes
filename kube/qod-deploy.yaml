@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: qod
+  name: qod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: qod
+    spec:
+      containers:
+      - image: qod:1.0.0
+        name: qod
+        env:
+          - name: REDIS_HOST
+            value: "redis"
+          - name: REDIS_PORT
+            value: "6379"
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
